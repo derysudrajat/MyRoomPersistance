@@ -6,11 +6,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.derysudrajat.myroompersistance.Room.AppDatabase;
 import com.derysudrajat.myroompersistance.Room.Mahasiswa;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,8 @@ public class DetailActivity extends AppCompatActivity {
 
     @BindView(R.id.myRecyclerview)
     RecyclerView myRecyclerview;
+    @BindView(R.id.fab_add)
+    FloatingActionButton mfab;
     RecycleAdapter recycleAdapter;
     List<Mahasiswa> listMahasiswas = new ArrayList<>();
 
@@ -50,6 +55,8 @@ public class DetailActivity extends AppCompatActivity {
             Log.e("Aplikasi",listMahasiswas.get(i).getName()+i);
             Log.e("Aplikasi",listMahasiswas.get(i).getNim()+i);
         }
+
+        mfab.setOnClickListener(v -> startActivity(new Intent(DetailActivity.this, MainActivity.class)));
     }
     @SuppressLint("WrongConstant")
     private void initRecyclerView() {
