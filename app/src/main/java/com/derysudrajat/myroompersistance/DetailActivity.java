@@ -20,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.derysudrajat.myroompersistance.Room.MyApp.db;
 
@@ -27,8 +28,6 @@ public class DetailActivity extends AppCompatActivity {
 
     @BindView(R.id.myRecyclerview)
     RecyclerView myRecyclerview;
-    @BindView(R.id.fab_add)
-    FloatingActionButton mfab;
     RecycleAdapter recycleAdapter;
     List<Mahasiswa> listMahasiswas = new ArrayList<>();
 
@@ -45,28 +44,33 @@ public class DetailActivity extends AppCompatActivity {
 
     private void fetchDataFromRoom() {
         db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class,"mahasiswa").allowMainThreadQueries().build();
+                AppDatabase.class, "mahasiswa").allowMainThreadQueries().build();
         listMahasiswas = db.userDao().getAll();
 
         //just checking data from db
-        for (int i = 0 ;i <listMahasiswas.size();i++){
-            Log.e("Aplikasi",listMahasiswas.get(i).getYear()+i);
-            Log.e("Aplikasi",listMahasiswas.get(i).getMajor()+i);
-            Log.e("Aplikasi",listMahasiswas.get(i).getName()+i);
-            Log.e("Aplikasi",listMahasiswas.get(i).getNim()+i);
+        for (int i = 0; i < listMahasiswas.size(); i++) {
+            Log.e("Aplikasi", listMahasiswas.get(i).getYear() + i);
+            Log.e("Aplikasi", listMahasiswas.get(i).getMajor() + i);
+            Log.e("Aplikasi", listMahasiswas.get(i).getName() + i);
+            Log.e("Aplikasi", listMahasiswas.get(i).getNim() + i);
         }
-
-        mfab.setOnClickListener(v -> startActivity(new Intent(DetailActivity.this, MainActivity.class)));
     }
+
     @SuppressLint("WrongConstant")
     private void initRecyclerView() {
         myRecyclerview.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         myRecyclerview.setLayoutManager(llm);
-        recycleAdapter =new RecycleAdapter(this,listMahasiswas);
+        recycleAdapter = new RecycleAdapter(this, listMahasiswas);
     }
+
     private void setAdapter() {
         myRecyclerview.setAdapter(recycleAdapter);
+    }
+
+    @OnClick(R.id.fab_add)
+    void addItems() {
+        startActivity(new Intent(DetailActivity.this, MainActivity.class));
     }
 }
