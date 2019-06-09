@@ -1,0 +1,65 @@
+package com.derysudrajat.myroompersistance;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.derysudrajat.myroompersistance.Room.AppDatabase;
+import com.derysudrajat.myroompersistance.Room.Mahasiswa;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static com.derysudrajat.myroompersistance.Room.MyApp.db;
+
+public class DetailActivity extends AppCompatActivity {
+
+    @BindView(R.id.myRecyclerview)
+    RecyclerView myRecyclerview;
+    RecycleAdapter recycleAdapter;
+    List<Mahasiswa> listMahasiswas = new ArrayList<>();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
+
+        fetchDataFromRoom();
+        initRecyclerView();
+        setAdapter();
+    }
+
+    private void fetchDataFromRoom() {
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class,"mahasiswa").allowMainThreadQueries().build();
+        listMahasiswas = db.userDao().getAll();
+
+        //just checking data from db
+        for (int i = 0 ;i <listMahasiswas.size();i++){
+            Log.e("Aplikasi",listMahasiswas.get(i).getYear()+i);
+            Log.e("Aplikasi",listMahasiswas.get(i).getMajor()+i);
+            Log.e("Aplikasi",listMahasiswas.get(i).getName()+i);
+            Log.e("Aplikasi",listMahasiswas.get(i).getNim()+i);
+        }
+    }
+    @SuppressLint("WrongConstant")
+    private void initRecyclerView() {
+        myRecyclerview.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        myRecyclerview.setLayoutManager(llm);
+        recycleAdapter =new RecycleAdapter(this,listMahasiswas);
+    }
+    private void setAdapter() {
+        myRecyclerview.setAdapter(recycleAdapter);
+    }
+}
